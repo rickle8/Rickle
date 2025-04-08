@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ year }} Standings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Force light blue everywhere */
+        body {
+            background-color: #add8e6 !important;
+            color: #000000 !important;
+        }
+        .container, .table, th, td {
+            background-color: #add8e6 !important;
+            color: #000000 !important;
+        }
+        .home-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #ff69b4;
+            color: white;
+            border: 3px dashed yellow;
+            border-radius: 50%;
+            padding: 15px;
+            text-decoration: none;
+            z-index: 1000;
+            transform: rotate(-10deg);
+        }
+        .table {
+            width: 100%;
+            overflow-x: auto;
+            display: block;
+        }
+        th, td {
+            text-align: center;
+            white-space: nowrap;
+        }
+        /* Subtle striping */
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #ccebff !important;
+        }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            .table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="home-button">PW</a>
+    <div class="container mt-4">
+        <h1>{{ year }} Standings</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Owner</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Ties</th>
+                    <th>Points For</th>
+                    <th>Points Against</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams %}
+                <tr>
+                    <td>{{ team.rank }}</td>
+                    <td>{{ team.name }}</td>
+                    <td>{{ team.owner }}</td>
+                    <td>{{ team.wins }}</td>
+                    <td>{{ team.losses }}</td>
+                    <td>{{ team.ties }}</td>
+                    <td>{{ team.points_for|round(2) }}</td>
+                    <td>{{ team.points_against|round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="/" class="btn btn-secondary mt-3">Back to Home</a>
+    </div>
+</body>
+</html>

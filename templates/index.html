@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>League History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #add8e6; /* Light blue */
+            color: #000000; /* Black */
+        }
+        .home-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #ff69b4; /* Hot pink */
+            color: white;
+            border: 3px dashed yellow;
+            border-radius: 50%;
+            padding: 15px;
+            text-decoration: none;
+            z-index: 1000;
+            transform: rotate(-10deg);
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="home-button">PW</a>
+    <div class="container">
+        <h1>Peyton Woods League History</h1>
+        <nav class="mb-3">
+            <a href="/head_to_head" class="btn btn-primary me-2">Head-to-Head Records</a>
+            <a href="/power_rankings" class="btn btn-primary me-2">All-Time Power Rankings</a>
+            <a href="/chat" class="btn btn-primary">Chat Board</a>
+        </nav>
+        <h2>Seasons</h2>
+        <div class="list-group">
+            {% for year in years %}
+                <a href="/year/{{ year }}" class="list-group-item list-group-item-action">
+                    {{ year }} {{ champions[loop.index0].team }} (Owner: {{ champions[loop.index0].owner }})
+                </a>
+            {% endfor %}
+        </div>
+        <br>
+        <h2>Highest Scoring Team of All Time</h2>
+        <p><strong>{{ highest_scoring_team_all_time.team }}</strong> scored <strong>{{ highest_scoring_team_all_time.score|round(2) }}</strong> points in the <strong>{{ highest_scoring_team_all_time.year }}</strong> season.</p>
+        <h2>Lowest Scoring Team of All Time</h2>
+        <p><strong>{{ lowest_scoring_team_all_time.team }}</strong> scored <strong>{{ lowest_scoring_team_all_time.score|round(2) }}</strong> points in the <strong>{{ lowest_scoring_team_all_time.year }}</strong> season.</p>
+        <h2>Scoring Records</h2>
+        <ul>
+            <li><strong>Highest Scoring Team:</strong> {{ scoring_records.highest_score.team }} scored {{ scoring_records.highest_score.score }} points in Week {{ scoring_records.highest_score.week }} of {{ scoring_records.highest_score.year }}</li>
+            <li><strong>Lowest Scoring Team:</strong> {{ scoring_records.lowest_score.team }} scored {{ scoring_records.lowest_score.score }} points in Week {{ scoring_records.lowest_score.week }} of {{ scoring_records.lowest_score.year }}</li>
+            <li><strong>Biggest Blowout:</strong> {{ scoring_records.biggest_blowout.teams }} with a margin of {{ scoring_records.biggest_blowout.margin }} points in Week {{ scoring_records.biggest_blowout.week }} of {{ scoring_records.biggest_blowout.year }}</li>
+        </ul>
+        <h2>Standings</h2>
+        <div class="accordion" id="standingsAccordion">
+            {% for year, data in league_history|dictsort(reverse=true) %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading{{ year }}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ year }}" aria-expanded="false" aria-controls="collapse{{ year }}">
+                            {{ year }} Standings
+                        </button>
+                    </h2>
+                    <div id="collapse{{ year }}" class="accordion-collapse collapse" aria-labelledby="heading{{ year }}" data-bs-parent="#standingsAccordion">
+                        <div class="accordion-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Team</th>
+                                        <th>Owner</th>
+                                        <th>Record</th>
+                                        <th>Points For</th>
+                                        <th>Points Against</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for team in data.teams %}
+                                        <tr>
+                                            <td>{{ team.rank }}</td>
+                                            <td>{{ team.name }}</td>
+                                            <td>{{ team.owner }}</td>
+                                            <td>{{ team.wins }}-{{ team.losses }}-{{ team.ties }}</td>
+                                            <td>{{ team.points_for|round(2) }}</td>
+                                            <td>{{ team.points_against|round(2) }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
